@@ -3,22 +3,24 @@ import { authService } from "../services/authService.js";
 
 const router = Router();
 
-router.post("/register", async (req, res) => {
-  try {
-    const r = await authService.post("/auth/register", req.body);
-    res.status(r.status).json(r.data);
-  } catch (err) {
-    res.status(err.response?.status || 500).json(err.response?.data || { error: err.message });
-  }
+// LOGIN
+router.post("/login", async (req, res) => {
+    try {
+        const result = await authService.post("/login", req.body);
+        res.json(result.data);
+    } catch (error) {
+        res.status(error.response?.status || 500).json(error.response?.data);
+    }
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    const r = await authService.post("/auth/login", req.body);
-    res.status(r.status).json(r.data);
-  } catch (err) {
-    res.status(err.response?.status || 500).json(err.response?.data || { error: err.message });
-  }
+// REGISTRO
+router.post("/register", async (req, res) => {
+    try {
+        const result = await authService.post("/register", req.body);
+        res.json(result.data);
+    } catch (error) {
+        res.status(error.response?.status || 500).json(error.response?.data);
+    }
 });
 
 export default router;
