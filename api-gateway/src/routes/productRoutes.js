@@ -4,40 +4,27 @@ import { verifyToken } from "../middlewares/verifyToken.js";
 
 const router = Router();
 
+// Todas las rutas acá requieren JWT
+router.use(verifyToken);
+
+// Listar productos
 router.get("/", async (req, res) => {
-  try {
-    const r = await productService.get("/products");
-    res.json(r.data);
-  } catch (err) {
-    res.status(err.response?.status || 500).json(err.response?.data || { error: err.message });
-  }
+    try {
+        const result = await productService.get("/");
+        res.json(result.data);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener productos" });
+    }
 });
 
-router.get("/:id", async (req, res) => {
-  try {
-    const r = await productService.get(`/products/${req.params.id}`);
-    res.json(r.data);
-  } catch (err) {
-    res.status(err.Response?.status || 500).json(err.response?.data || { error: err.message });
-  }
-});
-
-router.post("/", verifyToken, async (req, res) => {
-  try {
-    const r = await productService.post("/products", req.body);
-    res.status(r.status).json(r.data);
-  } catch (err) {
-    res.status(err.response?.status || 500).json(err.response?.data || { error: err.message });
-  }
-});
-
-router.delete("/:id", verifyToken, async (req, res) => {
-  try {
-    const r = await productService.delete(`/products/${req.params.id}`);
-    res.status(r.status).json(r.data);
-  } catch (err) {
-    res.status(err.response?.status || 500).json(err.response?.data || { error: err.message });
-  }
+// Crear producto
+router.post("/", async (req, res) => {
+    try {
+        const result = await productService.post("/", req.body);
+        res.json(result.data);
+    } catch (error) {
+        res.status(500).json({ error: "Error al crear producto" });
+    }
 });
 
 export default router;
