@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  usuarios:
+    build: ./services/usuarios
+    container_name: usuarios
+    restart: always
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/usuarios_db
+    ports:
+      - "4001:4001"
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
