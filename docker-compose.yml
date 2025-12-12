@@ -1,11 +1,9 @@
-version: "3.9"
-
 services:
   mongodb:
     image: mongo:latest
     container_name: mongo
     ports:
-      - "27017:2707"
+      - "27017:27017"
     volumes:
       - mongo_data:/data/db
 
@@ -32,6 +30,18 @@ services:
       - "4002:4002"
     depends_on:
       - mongodb
+
+  gateway:
+    build: ./services/api-gateway
+    container_name: gateway
+    restart: always
+    env_file:
+      - ./services/api-gateway/.env
+    ports:
+      - "4000:4000"
+    depends_on:
+      - usuarios
+      - productos
 
 volumes:
   mongo_data:
